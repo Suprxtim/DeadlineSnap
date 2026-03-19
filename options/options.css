@@ -1,0 +1,565 @@
+/* Options Page Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Press Start 2P', monospace, system-ui;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 10px;
+    line-height: 1.8;
+    min-height: 100vh;
+}
+
+/* CSS Variables */
+:root {
+    --grass-green: #5CB85C;
+    --stone-gray: #7A7A7A;
+    --diamond-blue: #4A9EFF;
+    --redstone-red: #E74C3C;
+    --gold-yellow: #F1C40F;
+
+    --bg-primary: #FAFAFA;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #E0E0E0;
+    --text-primary: #2C2C2C;
+    --text-muted: #7A7A7A;
+    --border-main: #2C2C2C;
+    --header-bg: #2C2C2C;
+    --header-text: #FFFFFF;
+    --card-shadow: rgba(0, 0, 0, 0.2);
+    --overlay-bg: var(--overlay-bg);
+
+    --border-thick: 4px;
+    --shadow-block: 6px 6px 0 var(--card-shadow);
+    --shadow-block-sm: 4px 4px 0 var(--card-shadow);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0F1419;
+    --bg-secondary: #1A1F2E;
+    --bg-tertiary: #2D3748;
+    --text-primary: #E0E0E0;
+    --text-muted: #A0A0A0;
+    --border-main: #4A4A4A;
+    --header-bg: #1A1F2E;
+    --header-text: #E0E0E0;
+    --card-shadow: rgba(0, 0, 0, 0.6);
+    --overlay-bg: rgba(15, 20, 25, 0.95);
+
+    --grass-green: #68C968;
+    --diamond-blue: #5BAAFF;
+    --redstone-red: #F05C4D;
+}
+
+body,
+.pixel-container,
+.pixel-header,
+.pixel-card,
+.modal-content,
+.task-card,
+.pixel-input,
+.pixel-select,
+.tab,
+.upload-zone,
+.pixel-button,
+.toast,
+.filter-tabs,
+.pixel-footer,
+.options-container {
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.options-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 48px;
+}
+
+/* Header Banner */
+.pixel-banner {
+    background: linear-gradient(135deg, var(--diamond-blue), var(--grass-green));
+    border-bottom: 6px solid var(--border-main);
+    padding: 32px 24px;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.pixel-banner h1 {
+    font-size: 20px;
+    color: white;
+    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+}
+
+/* Main Content */
+.options-content {
+    padding: 0 24px;
+}
+
+/* Pixel Card */
+.pixel-card {
+    background: var(--bg-secondary);
+    border: 4px solid var(--border-main);
+    box-shadow: 8px 8px 0 var(--card-shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+/* Welcome Card */
+.welcome-card {
+    background: linear-gradient(135deg, #FFF9E6, #FFF);
+    text-align: center;
+}
+
+.welcome-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.welcome-card h2 {
+    font-size: 16px;
+    color: var(--diamond-blue);
+    margin-bottom: 16px;
+}
+
+.welcome-card p {
+    margin-bottom: 12px;
+    line-height: 2;
+}
+
+.welcome-card ol {
+    text-align: left;
+    max-width: 400px;
+    margin: 16px auto;
+    padding-left: 24px;
+}
+
+.welcome-card li {
+    margin-bottom: 8px;
+}
+
+.small {
+    font-size: 8px;
+    color: var(--stone-gray);
+}
+
+/* Settings Section */
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.section-description {
+    font-size: 9px;
+    color: var(--stone-gray);
+    line-height: 2;
+    margin-bottom: 16px;
+}
+
+/* Pixel Button */
+.pixel-button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 12px 20px;
+    border: 4px solid var(--border-main);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--card-shadow);
+    text-transform: uppercase;
+    transition: all 0.1s steps(2);
+}
+
+.pixel-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--card-shadow);
+}
+
+.pixel-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.pixel-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pixel-button.primary {
+    background: var(--diamond-blue);
+    color: white;
+}
+
+.pixel-button.secondary {
+    background: var(--stone-gray);
+    color: white;
+}
+
+.pixel-button.danger {
+    background: var(--redstone-red);
+    color: white;
+}
+
+.pixel-button.icon-btn {
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+/* Pixel Input */
+.pixel-input {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 12px;
+    border: 3px solid var(--border-main);
+    background: var(--bg-secondary);
+    width: 100%;
+    outline: none;
+}
+
+.pixel-input:focus {
+    border-color: var(--diamond-blue);
+}
+
+.pixel-select {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 12px;
+    border: 3px solid var(--border-main);
+    background: var(--bg-secondary);
+    width: 100%;
+    cursor: pointer;
+}
+
+/* API Key Group */
+.api-key-group {
+    margin-bottom: 16px;
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.button-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Status Message */
+.status-message {
+    padding: 12px;
+    margin-top: 16px;
+    border: 3px solid;
+    font-size: 9px;
+    line-height: 1.8;
+}
+
+.status-message.success {
+    background: rgba(92, 184, 92, 0.1);
+    border-color: var(--grass-green);
+    color: var(--grass-green);
+}
+
+.status-message.error {
+    background: rgba(231, 76, 60, 0.1);
+    border-color: var(--redstone-red);
+    color: var(--redstone-red);
+}
+
+.status-message.info {
+    background: rgba(74, 158, 255, 0.1);
+    border-color: var(--diamond-blue);
+    color: var(--diamond-blue);
+}
+
+/* Checkbox */
+.checkbox-group {
+    margin-bottom: 16px;
+}
+
+.pixel-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 8px;
+    border: 2px solid transparent;
+    transition: all 0.1s;
+}
+
+.pixel-checkbox:hover {
+    background: rgba(74, 158, 255, 0.05);
+    border-color: var(--diamond-blue);
+}
+
+.pixel-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border-main);
+    background: var(--bg-secondary);
+    display: inline-block;
+    position: relative;
+}
+
+.pixel-checkbox input:checked~.checkmark {
+    background: var(--grass-green);
+}
+
+.pixel-checkbox input:checked~.checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 3px;
+    color: white;
+    font-size: 16px;
+}
+
+.label-text {
+    font-size: 10px;
+}
+
+/* Data Stats */
+.data-stats {
+    background: rgba(0, 0, 0, 0.03);
+    border: 3px solid var(--border-main);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 9px;
+}
+
+.stat-label {
+    color: var(--stone-gray);
+}
+
+.stat-value {
+    font-weight: bold;
+    color: var(--diamond-blue);
+}
+
+/* About Info */
+.about-info {
+    background: rgba(0, 0, 0, 0.03);
+    border: 3px solid var(--border-main);
+    padding: 16px;
+    margin-bottom: 16px;
+    line-height: 2;
+}
+
+.about-info strong {
+    color: var(--diamond-blue);
+}
+
+/* Danger Zone */
+.danger-zone {
+    border-color: var(--redstone-red);
+    background: rgba(231, 76, 60, 0.05);
+}
+
+/* Footer */
+.options-footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--stone-gray);
+    font-size: 8px;
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Toasts */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toast {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 16px 20px;
+    background: var(--bg-secondary);
+    border: 4px solid var(--border-main);
+    box-shadow: 6px 6px 0 var(--card-shadow);
+    animation: slideInRight 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toast.success {
+    border-color: var(--grass-green);
+    border-left: 8px solid var(--grass-green);
+}
+
+.toast.error {
+    border-color: var(--redstone-red);
+    border-left: 8px solid var(--redstone-red);
+}
+
+.toast.info {
+    border-color: var(--diamond-blue);
+    border-left: 8px solid var(--diamond-blue);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Telegram Setup */
+.telegram-setup {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 2px dashed var(--border-main);
+}
+
+.chat-id-display {
+    display: inline-block;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 3px solid var(--border-main);
+    color: var(--diamond-blue);
+    min-width: 120px;
+}
+
+[data-theme="dark"] .chat-id-display {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.modal-overlay.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 600px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: modalPop 0.2s steps(3) forwards;
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    font-size: 12px;
+    z-index: 1;
+}
+
+.modal-steps {
+    list-style: none;
+    counter-reset: steps;
+    padding: 0;
+}
+
+.modal-steps li {
+    counter-increment: steps;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    font-size: 9px;
+    line-height: 2;
+    border: 2px solid var(--border-main);
+    background: rgba(74, 158, 255, 0.03);
+    transition: background 0.1s;
+}
+
+.modal-steps li:hover {
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.modal-steps li strong {
+    color: var(--diamond-blue);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pixel-banner h1 {
+        font-size: 16px;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+
+    .pixel-button {
+        width: 100%;
+    }
+}

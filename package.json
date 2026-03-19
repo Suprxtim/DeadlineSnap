@@ -1,0 +1,9 @@
+{
+    "name": "deadlinesnap",
+    "version": "1.0.0",
+    "description": "DeadlineSnap Chrome Extension",
+    "scripts": {
+        "build": "echo 'Extension ready for packaging'",
+        "pack": "zip -r deadlinesnap-extension.zip . -x '*.git*' 'node_modules/*' '.DS_Store'"
+    }
+}

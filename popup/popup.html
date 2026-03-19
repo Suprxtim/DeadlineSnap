@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeadlineSnap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+    <script src="../utils/theme-loader.js"></script>
+</head>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<!-- Main Container -->
+<div id="app" class="pixel-container">
+
+    <!-- Header -->
+    <header class="pixel-header">
+        <h1 class="logo">DEADLINESNAP</h1>
+        <div class="header-actions">
+            <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme" aria-label="Toggle theme">🌙</button>
+            <button id="settingsBtn" class="icon-btn" title="Settings" aria-label="Open settings">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Setup Screen (shown if not configured) -->
+    <div id="setupScreen" class="setup-screen hidden">
+        <div class="setup-content">
+            <div class="pixel-icon">🎮</div>
+            <h2>WELCOME!</h2>
+            <p class="setup-text">Get your free Gemini API key to start tracking deadlines</p>
+            <button id="getApiKeyBtn" class="pixel-button primary">
+                GET FREE API KEY
+            </button>
+            <div class="api-input-group">
+                <input type="password" id="apiKeyInput" class="pixel-input" placeholder="Paste API key here..." />
+                <button id="saveApiKeyBtn" class="pixel-button">SAVE</button>
+            </div>
+            <p class="error-text hidden" id="setupError"></p>
+        </div>
+    </div>
+
+    <!-- Main App (shown after setup) -->
+    <div id="mainApp" class="hidden">
+
+        <!-- Filter Tabs -->
+        <nav class="filter-tabs" aria-label="Task filters">
+            <button class="tab active" data-filter="all" aria-label="Show all tasks">
+                ALL <span class="badge" id="badgeAll">0</span>
+            </button>
+            <button class="tab" data-filter="pending" aria-label="Show pending tasks">
+                PENDING <span class="badge" id="badgePending">0</span>
+            </button>
+            <button class="tab" data-filter="completed" aria-label="Show completed tasks">
+                DONE <span class="badge" id="badgeCompleted">0</span>
+            </button>
+        </nav>
+
+        <!-- Task List Container -->
+        <div class="task-list-container">
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">📭</div>
+                <h3>NO TASKS YET</h3>
+                <p>Start tracking your deadlines!</p>
+                <div class="empty-tips">
+                    <p class="tip">Tip: Press <strong>Ctrl+Shift+S</strong> to capture anywhere.</p>
+                    <p class="tip">Or right-click any image and select "Add to DeadlineSnap".</p>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state hidden">
+                <div class="pixel-spinner"></div>
+                <p>LOADING...</p>
+            </div>
+
+            <!-- Task List -->
+            <div id="taskList" class="task-list">
+                <!-- Tasks will be injected here by JavaScript -->
+            </div>
+
+        </div>
+
+        <!-- Upload / Paste / Drop Zone -->
+        <div id="uploadZone" class="upload-zone" tabindex="0" aria-label="Paste or drag a screenshot here">
+            <div class="upload-zone-content">
+                <span class="upload-zone-icon">📋</span>
+                <span class="upload-zone-text">Paste (Ctrl+V) or drag image here</span>
+            </div>
+        </div>
+
+        <!-- Hidden file input -->
+        <input type="file" id="fileInput" accept="image/*" class="hidden" aria-hidden="true" />
+
+        <!-- Footer Actions -->
+        <footer class="pixel-footer">
+            <div class="footer-buttons">
+                <button id="captureTabBtn" class="pixel-button primary" aria-label="Capture current tab screenshot">
+                    📷 CAPTURE
+                </button>
+                <button id="uploadBtn" class="pixel-button success" aria-label="Upload screenshot from device">
+                    📁 UPLOAD
+                </button>
+            </div>
+        </footer>
+
+        <!-- Processing Overlay -->
+        <div id="processingOverlay" class="processing-overlay hidden">
+            <div class="processing-content">
+                <div class="pixel-spinner"></div>
+                <p id="processingText">ANALYZING...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Task Detail View (Modal) -->
+    <div id="taskDetailModal" class="modal hidden" role="dialog" aria-labelledby="detailTitle" aria-modal="true">
+        <div class="modal-content pixel-card">
+            <button class="close-btn" id="closeModalBtn" aria-label="Close modal">✕</button>
+
+            <div class="task-detail-container">
+                <!-- Screenshot -->
+                <div class="screenshot-preview">
+                    <img id="detailScreenshot" src="" alt="Screenshot" />
+                </div>
+
+                <!-- Task Details -->
+                <div class="detail-section">
+                    <label>TITLE:</label>
+                    <input type="text" id="detailTitle" class="pixel-input" />
+                </div>
+
+                <div class="detail-section">
+                    <label>DEADLINE:</label>
+                    <input type="datetime-local" id="detailDeadline" class="pixel-input" />
+                    <div class="countdown" id="detailCountdown"></div>
+                </div>
+
+                <!-- Remind Me Section -->
+                <div class="detail-section reminder-section">
+                    <label>🔔 REMIND ME:</label>
+                    <div class="reminder-grid">
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_at_due" data-type="at_due_time" data-offset="0" checked />
+                            <span>At due time</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_15min" data-type="15min" data-offset="900000" />
+                            <span>15 min before</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_30min" data-type="30min" data-offset="1800000" />
+                            <span>30 min before</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_1hour" data-type="1hour" data-offset="3600000" checked />
+                            <span>1 hour before</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_2hours" data-type="2hours" data-offset="7200000" />
+                            <span>2 hours before</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_1day" data-type="1day" data-offset="86400000" checked />
+                            <span>1 day before</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_3days" data-type="3days" data-offset="259200000" />
+                            <span>3 days before</span>
+                        </label>
+                        <label class="reminder-option">
+                            <input type="checkbox" id="remind_1week" data-type="1week" data-offset="604800000" />
+                            <span>1 week before</span>
+                        </label>
+                    </div>
+                    <label class="reminder-option popup-notif-toggle">
+                        <input type="checkbox" id="showPopupNotification" checked />
+                        <span>Show popup notification</span>
+                    </label>
+                </div>
+
+                <div class="detail-section">
+                    <label>CATEGORY:</label>
+                    <select id="detailCategory" class="pixel-select">
+                        <option value="scholarship">📚 SCHOLARSHIP</option>
+                        <option value="internship">💼 INTERNSHIP</option>
+                        <option value="event">🎯 EVENT</option>
+                        <option value="course">📖 COURSE</option>
+                        <option value="other">📌 OTHER</option>
+                    </select>
+                </div>
+
+                <div class="detail-section">
+                    <label>CONFIDENCE:</label>
+                    <div class="confidence-badge" id="detailConfidence">HIGH</div>
+                </div>
+
+                <div class="detail-section">
+                    <label>NOTES:</label>
+                    <textarea id="detailNotes" class="pixel-input" rows="4"></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="detail-actions">
+                    <button id="deleteTaskBtn" class="pixel-button danger" aria-label="Delete task">
+                        🗑️ DELETE
+                    </button>
+                    <div class="right-actions">
+                        <button id="toggleCompleteBtn" class="pixel-button success"
+                            aria-label="Toggle completion status">
+                            ✓ COMPLETE
+                        </button>
+                        <button id="saveTaskBtn" class="pixel-button primary" aria-label="Save changes">
+                            💾 SAVE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="module" src="popup.js"></script>
+</body>
+
+</html>

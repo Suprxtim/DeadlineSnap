@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeadlineSnap Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="options.css">
+    <script src="../utils/theme-loader.js"></script>
+</head>
+
+<body>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <div class="options-container">
+
+        <!-- Header Banner -->
+        <header class="pixel-banner">
+            <h1>⚙️ DEADLINESNAP SETTINGS</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="options-content">
+
+            <!-- Welcome Message (only on first setup) -->
+            <div id="welcomeMessage" class="welcome-card pixel-card hidden">
+                <div class="welcome-icon">🎮</div>
+                <h2>WELCOME TO DEADLINESNAP!</h2>
+                <p>Let's set up your AI-powered deadline tracker in 2 steps:</p>
+                <ol>
+                    <li>Get your free Gemini API key</li>
+                    <li>Paste it below and save</li>
+                </ol>
+                <p class="small">Your API key stays private on your device. We never see it.</p>
+            </div>
+
+            <!-- Theme Settings -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">🎨 THEME</h2>
+                <p class="section-description">
+                    Choose your preferred appearance.
+                </p>
+
+                <div class="radio-group" style="display: flex; gap: 16px; margin-bottom: 12px;">
+                    <label class="pixel-checkbox" style="gap: 8px;">
+                        <input type="radio" name="themeSetting" value="light" id="themeLight" />
+                        <span class="checkmark" style="border-radius: 50%;"></span>
+                        <span class="label-text">LIGHT</span>
+                    </label>
+                    <label class="pixel-checkbox" style="gap: 8px;">
+                        <input type="radio" name="themeSetting" value="dark" id="themeDark" />
+                        <span class="checkmark" style="border-radius: 50%;"></span>
+                        <span class="label-text">DARK</span>
+                    </label>
+                    <label class="pixel-checkbox" style="gap: 8px;">
+                        <input type="radio" name="themeSetting" value="auto" id="themeAuto" />
+                        <span class="checkmark" style="border-radius: 50%;"></span>
+                        <span class="label-text">AUTO</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- API Settings Section -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">🔑 GEMINI API KEY</h2>
+                <p class="section-description">
+                    Your API key is used to extract deadline information from screenshots.
+                    Free tier includes 1,500 requests/day.
+                </p>
+
+                <div class="api-key-group">
+                    <div class="input-row">
+                        <input type="password" id="apiKeyInput" class="pixel-input"
+                            placeholder="Enter your Gemini API key..." aria-label="Gemini API Key" />
+                        <button id="toggleApiKeyBtn" class="pixel-button secondary icon-btn"
+                            aria-label="Toggle API Key visibility">
+                            👁️
+                        </button>
+                    </div>
+
+                    <div class="button-row">
+                        <button id="getApiKeyBtn" class="pixel-button secondary">
+                            GET FREE API KEY
+                        </button>
+                        <button id="testApiKeyBtn" class="pixel-button secondary">
+                            TEST KEY
+                        </button>
+                        <button id="saveApiKeyBtn" class="pixel-button primary">
+                            💾 SAVE
+                        </button>
+                    </div>
+                </div>
+
+                <div id="apiKeyStatus" class="status-message hidden"></div>
+            </section>
+
+            <!-- Notification Settings -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">🔔 NOTIFICATIONS</h2>
+                <p class="section-description">
+                    Choose when you want to receive deadline reminders.
+                </p>
+
+                <div class="checkbox-group">
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="remind7days" checked />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Remind me 7 days before</span>
+                    </label>
+
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="remind3days" checked />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Remind me 3 days before</span>
+                    </label>
+
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="remind1day" checked />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Remind me 1 day before</span>
+                    </label>
+                </div>
+
+                <button id="saveNotificationsBtn" class="pixel-button primary">
+                    SAVE PREFERENCES
+                </button>
+            </section>
+
+            <!-- Telegram Notifications -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">📱 TELEGRAM NOTIFICATIONS</h2>
+                <p class="section-description">
+                    Get deadline reminders on your phone via Telegram.
+                </p>
+
+                <div class="checkbox-group">
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="enableTelegram"
+                            onchange="document.getElementById('telegramSetup').classList.toggle('hidden', !this.checked)" />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Enable Telegram notifications</span>
+                    </label>
+                </div>
+
+                <div id="telegramSetup" class="telegram-setup hidden">
+                    <button id="setupBotHelpBtn" class="pixel-button secondary" style="margin-bottom: 16px;">
+                        📖 HOW TO SETUP BOT
+                    </button>
+
+                    <div style="margin-bottom: 12px;">
+                        <label class="section-description" for="botToken" style="display:block; margin-bottom: 6px;">Bot
+                            Token:</label>
+                        <input type="password" id="botToken" class="pixel-input" placeholder="123456789:ABCdef..."
+                            aria-label="Telegram Bot Token" />
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label class="section-description" style="display:block; margin-bottom: 6px;">Chat ID:</label>
+                        <span id="chatIdDisplay" class="chat-id-display">Not connected</span>
+                    </div>
+
+                    <div class="button-row" style="margin-bottom: 16px;">
+                        <button id="connectTelegramBtn" class="pixel-button primary">
+                            🔗 CONNECT TELEGRAM
+                        </button>
+                        <button id="testTelegramBtn" class="pixel-button secondary" disabled>
+                            📨 SEND TEST MESSAGE
+                        </button>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label class="pixel-checkbox">
+                            <input type="checkbox" id="telegramIncludeScreenshot" />
+                            <span class="checkmark"></span>
+                            <span class="label-text">Include screenshot in Telegram messages</span>
+                        </label>
+                    </div>
+
+                    <div id="telegramStatus" class="status-message hidden"></div>
+                </div>
+            </section>
+
+            <!-- Widget Settings -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">📌 IN-PAGE WIDGET</h2>
+                <p class="section-description">
+                    Configure the floating deadline widget that appears on webpages.
+                </p>
+
+                <div class="checkbox-group">
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="widgetEnabled" checked />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Enable floating widget on pages</span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <label class="section-description" for="widgetPosition"
+                        style="display:block; margin-bottom: 6px;">Position</label>
+                    <select id="widgetPosition" class="pixel-select">
+                        <option value="bottom-right">↘ BOTTOM-RIGHT</option>
+                        <option value="bottom-left">↙ BOTTOM-LEFT</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <label class="section-description" for="widgetAutoHide"
+                        style="display:block; margin-bottom: 6px;">Auto-hide delay</label>
+                    <select id="widgetAutoHide" class="pixel-select">
+                        <option value="5">5 seconds</option>
+                        <option value="10" selected>10 seconds</option>
+                        <option value="30">30 seconds</option>
+                        <option value="never">Never</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <label class="section-description" for="widgetBlacklist"
+                        style="display:block; margin-bottom: 6px;">Blacklisted domains (one per line)</label>
+                    <textarea id="widgetBlacklist" class="pixel-input" rows="3"
+                        placeholder="example.com&#10;another.com"
+                        style="resize: vertical; min-height: 60px; font-size: 9px;"></textarea>
+                </div>
+
+                <div class="checkbox-group" style="margin-top: 12px;">
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="widgetSound" />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Play sound on new reminders</span>
+                    </label>
+                </div>
+
+                <button id="saveWidgetBtn" class="pixel-button primary" style="margin-top: 16px;">
+                    SAVE WIDGET SETTINGS
+                </button>
+            </section>
+
+            <!-- Default Category -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">📁 DEFAULT CATEGORY</h2>
+                <p class="section-description">
+                    Set the default category for new tasks (can be changed per task).
+                </p>
+
+                <select id="defaultCategory" class="pixel-select" aria-label="Default category">
+                    <option value="other">📌 OTHER</option>
+                    <option value="scholarship">📚 SCHOLARSHIP</option>
+                    <option value="internship">💼 INTERNSHIP</option>
+                    <option value="event">🎯 EVENT</option>
+                    <option value="course">📖 COURSE</option>
+                </select>
+            </section>
+
+            <!-- Data Management -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">💾 DATA MANAGEMENT</h2>
+                <p class="section-description">
+                    Manage your stored tasks and data.
+                </p>
+
+                <div class="data-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Tasks:</span>
+                        <span class="stat-value" id="totalTasks">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Pending Tasks:</span>
+                        <span class="stat-value" id="pendingTasks">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Storage Used:</span>
+                        <span class="stat-value" id="storageUsed">0 KB</span>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button id="exportDataBtn" class="pixel-button secondary">
+                        📤 EXPORT DATA
+                    </button>
+                    <button id="clearDataBtn" class="pixel-button danger">
+                        🗑️ CLEAR ALL DATA
+                    </button>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="settings-section pixel-card">
+                <h2 class="section-title">ℹ️ ABOUT</h2>
+
+                <div class="about-info">
+                    <p><strong>DeadlineSnap</strong></p>
+                    <p>Version: 1.0.0</p>
+                    <p>Never miss a deadline with AI-powered deadline tracking.</p>
+                </div>
+
+                <div class="button-row">
+                    <button id="privacyBtn" class="pixel-button secondary">
+                        🔒 PRIVACY POLICY
+                    </button>
+                    <button id="reportBugBtn" class="pixel-button secondary">
+                        🐛 REPORT BUG
+                    </button>
+                    <button id="rateBtn" class="pixel-button secondary">
+                        ⭐ RATE EXTENSION
+                    </button>
+                </div>
+            </section>
+
+            <!-- Debug Section -->
+            <section class="settings-section pixel-card" id="debugSection">
+                <h2 class="section-title">🐛 DEBUG MODE</h2>
+                <p class="section-description">
+                    Enable advanced logging and debugging tools.
+                </p>
+
+                <div class="checkbox-group">
+                    <label class="pixel-checkbox">
+                        <input type="checkbox" id="debugModeToggle" />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Enable debug mode</span>
+                    </label>
+                </div>
+
+                <div id="debugTools" class="hidden" style="margin-top: 20px;">
+                    <div class="data-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Version:</span>
+                            <span class="stat-value" id="debugExtensionVersion">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Chrome:</span>
+                            <span class="stat-value" id="debugChromeVersion">-</span>
+                        </div>
+                    </div>
+                    <div class="button-row" style="margin-top: 15px;">
+                        <button id="copyDebugInfoBtn" class="pixel-button secondary">
+                            📋 COPY INFO
+                        </button>
+                        <button id="downloadDebugLogBtn" class="pixel-button secondary">
+                            📥 DOWNLOAD LOG
+                        </button>
+                        <button id="clearDebugLogBtn" class="pixel-button danger">
+                            🗑️ CLEAR LOGS
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reset Section -->
+            <section class="settings-section pixel-card danger-zone">
+                <h2 class="section-title">⚠️ DANGER ZONE</h2>
+                <p class="section-description">
+                    These actions cannot be undone.
+                </p>
+
+                <button id="resetBtn" class="pixel-button danger">
+                    RESET TO FACTORY SETTINGS
+                </button>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="options-footer">
+            <p>Made with ❤️ for students who love deadlines (just kidding)</p>
+        </footer>
+
+    </div>
+
+    <!-- Telegram Setup Modal -->
+    <div id="telegramModal" class="modal-overlay hidden">
+        <div class="modal-content pixel-card">
+            <button id="closeTelegramModal" class="modal-close pixel-button danger">✕</button>
+            <h2 class="section-title" style="margin-bottom: 16px;">🤖 SETUP TELEGRAM BOT</h2>
+            <ol class="modal-steps">
+                <li>📱 Open Telegram app on your phone or desktop</li>
+                <li>🔍 Search for <strong>@BotFather</strong> (official bot)</li>
+                <li>💬 Send the <strong>/newbot</strong> command</li>
+                <li>✏️ Follow prompts to name your bot (e.g., "MyDeadlineBot")</li>
+                <li>🔑 BotFather gives you a <strong>TOKEN</strong> — copy it</li>
+                <li>📋 Paste the token in the "Bot Token" field above</li>
+                <li>🔗 Click the <strong>t.me/YourBotName</strong> link BotFather sent</li>
+                <li>▶️ Press <strong>START</strong> button to open chat with your bot</li>
+                <li>🔌 Click <strong>"Connect Telegram"</strong> button in extension</li>
+                <li>🆔 Extension will auto-detect your Chat ID</li>
+                <li>✅ Test by clicking <strong>"Send Test Message"</strong></li>
+            </ol>
+            <p class="section-description" style="margin-top: 16px; margin-bottom: 0;">
+                🔒 Your bot is private — only you can send/receive messages.
+            </p>
+        </div>
+    </div>
+
+    <script type="module" src="options.js"></script>
+</body>
+
+</html>
